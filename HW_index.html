@@ -1,0 +1,57 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Perceptron L vs T Classifier</title>
+    <style>
+        .grid { display: grid; grid-template-columns: repeat(4, 50px); gap: 5px; margin-bottom: 20px; }
+        .cell { width: 50px; height: 50px; border: 1px solid #ccc; cursor: pointer; background: white; }
+        .cell.active { background: #333; }
+        #result { font-weight: bold; font-size: 1.2em; color: blue; }
+    </style>
+</head>
+<body>
+    <h2>Draw an 'L' or a 'T'</h2>
+    <div class="grid" id="grid"></div>
+    
+    <button onclick="clearGrid()">Clear</button>
+    <button onclick="runInference()">Predict</button>
+    
+    <p>Model Result: <span id="result">Waiting...</span></p>
+
+    <script>
+        const weights =; 
+        const bias = 0; 
+
+        const gridDiv = document.getElementById('grid');
+        for (let i = 0; i < 16; i++) {
+            const cell = document.createElement('div');
+            cell.className = 'cell';
+            cell.onclick = () => cell.classList.toggle('active');
+            gridDiv.appendChild(cell);
+        }
+
+        function getGridData() {
+            const cells = document.querySelectorAll('.cell');
+            return Array.from(cells).map(c => c.classList.contains('active') ? 1 : 0);
+        }
+
+        function runInference() {
+            const inputs = getGridData();
+            let sum = 0;
+
+            for (let i = 0; i < inputs.length; i++) {
+                sum += inputs[i] * weights[i];
+            }
+            sum += bias;
+
+            const prediction = sum >= 0 ? "T" : "L";
+            document.getElementById('result').innerText = "This is a " + prediction;
+        }
+
+        function clearGrid() {
+            document.querySelectorAll('.cell').forEach(c => c.classList.remove('active'));
+            document.getElementById('result').innerText = "Waiting...";
+        }
+    </script>
+</body>
+</html>
